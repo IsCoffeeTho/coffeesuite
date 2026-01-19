@@ -10,6 +10,7 @@ enum batteryState {
 }
 
 export default async function batteryService(hyprl: hyprland) {
+	console.log("Starting battery notification service.");
 	var batState = batteryState.OK;
 
 	var upower = Bun.spawn(["upower", "--monitor-detail"], { stdout: "pipe" });
@@ -30,6 +31,7 @@ export default async function batteryService(hyprl: hyprland) {
 		var percent = parseInt(obj["percentage"] ?? "0%");
 		if (obj["state"] == "discharging") {
 			if (percent <= <number>(<any>cfg.battery).CRITICAL && batState < batteryState.CRITICAL) {
+				console.log("Battery hit critical level; notifying");
 				batState = batteryState.CRITICAL;
 				notifier.notify({
 					title: "Battery Critically Low",
@@ -37,6 +39,7 @@ export default async function batteryService(hyprl: hyprland) {
 					urgency: "critical",
 				});
 			} else if (percent <= <number>(<any>cfg.battery).LOW && batState < batteryState.LOW) {
+				console.log("Battery hit low level; notifying");
 				batState = batteryState.LOW;
 				notifier.notify({
 					title: "Battery Level Low",
@@ -45,8 +48,11 @@ export default async function batteryService(hyprl: hyprland) {
 				});
 			}
 		} else if (obj["state"] != "fully-charged") {
+			if (batState == batteryState.FULL)
+				console.log(`Battery state supplied "${obj["state"]}" after being fully charged.`);
 			batState = batteryState.OK;
 		} else if (batState != batteryState.FULL) {
+			console.log("Battery full; notifying");
 			batState = batteryState.FULL;
 			notifier.notify({
 				title: "Battery is Full",

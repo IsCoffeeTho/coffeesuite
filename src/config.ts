@@ -26,6 +26,7 @@ export var cfg: cfgOptions = {
 };
 
 export function readConfig(cfgFile: string) {
+	console.log(`Reading config file "${cfgFile}"`);
 	var newcfg = {};
 	try {
 		newcfg = JSON.parse(readFileSync(cfgFile).toString());

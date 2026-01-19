@@ -13,6 +13,7 @@ var currentWorkspace = "";
 var lastNonOneshotWorkspace = "";
 
 export default async function oneshotService(hyprl: hyprland) {
+	console.log(`Starting oneshot service.`);
 	const defaultMonitor = hyprl.monitors()[0].name;
 
 	for (var oneshotWorkspace in cfg.oneshots) {
@@ -43,12 +44,13 @@ export default async function oneshotService(hyprl: hyprland) {
 		for (var oneshotID in oneshots) {
 			var oneshotdata = <oneshotDescriptor>oneshots[oneshotID];
 			if (!oneshotdata.class.test(data.class)) continue;
+			console.log(`Tracking a oneshot window for "${oneshotID}"`);
 			oneshotdata.windows.push(data.windowAddr);
 			return;
 		}
 		if (currentWorkspace != lastNonOneshotWorkspace) {
-			console.log(data.class, data.windowAddr, "was opened in", data.workspace);
-			hyprl.dispatch("movetoworkspacesilent", `name:${lastNonOneshotWorkspace},address:0x${data.windowAddr}`);
+			console.log(`Moving window from a oneshot workspace`);
+			hyprl.dispatch("movetoworkspace", `name:${lastNonOneshotWorkspace},address:0x${data.windowAddr}`);
 		}
 	}
 
@@ -77,10 +79,12 @@ export default async function oneshotService(hyprl: hyprland) {
 			for (var idx in oneshot.windows) {
 				var applications = <string>oneshot.windows[idx];
 				if (applications != data.windowAddr) continue;
+				console.log(`oneshot window for "${oneshotWorkspace}" was closed`);
 				oneshot.windows = oneshot.windows.filter(v => {
 					return v != data.windowAddr;
 				});
 				if (oneshot.windows.length == 0) {
+					console.log(`No more windows in "${oneshotWorkspace}", moving to last workspace`);
 					if (currentWorkspace == oneshotWorkspace) hyprl.dispatch("workspace", `${lastNonOneshotWorkspace ?? "1"}`);
 				}
 				return;
