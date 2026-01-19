@@ -1,5 +1,7 @@
 # coffeesuite
 
+
+
 > [!info] Built for Linux  
 > This program is intended for use on a linux system with hyprland being used.
 
@@ -10,7 +12,7 @@ Configuration file locations:
 ## Hyprland Oneshots
 
 coffeesuite will make certain programs auto create their own "oneshot" workspaces.
-```json
+```jsonc
 // config.json
 {
 	"oneshots": {
@@ -28,7 +30,7 @@ coffeesuite will make certain programs auto create their own "oneshot" workspace
 ## Battery Indicator
 
 Will add a notification about the battery when its `low`, `critical` or `full`.
-```json
+```jsonc
 // config.json
 {
 	"battery": {
