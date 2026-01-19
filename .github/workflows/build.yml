@@ -22,8 +22,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: '${{ inputs.head.label }}'
-          name: '${{ inputs.head.label }}'
+          tag_name: 'v${{ inputs.head.label }}'
+          name: 'v${{ inputs.head.label }}'
           body: "**Full Changelog**: ${{ inputs.pull_request.diff_url }}\n${{ inputs.body }}"
           draft: true
           make_latest: true
