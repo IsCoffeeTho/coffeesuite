@@ -26,8 +26,8 @@ if (await pidFile.exists()) {
 }
 pidFile.write(`${process.pid}`);
 
-readConfig("/etc/mydaemon/config.json");
-readConfig(`${process.env["XDG_CONFIG_HOME"] ?? `${process.env["HOME"]}/.config`}/mydaemon/config.json`);
+readConfig("/etc/coffeesuite/config.json");
+readConfig(`${process.env["XDG_CONFIG_HOME"] ?? `${process.env["HOME"]}/.config`}/coffeesuite/config.json`);
 
 const hyprctl = new hyprland();
 

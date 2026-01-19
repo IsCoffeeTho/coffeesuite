@@ -1,15 +1,39 @@
-# myDaemon
+# coffeesuite
 
-To install dependencies:
+> [!info] Built for Linux  
+> This program is intended for use on a linux system with hyprland being used.
 
-```bash
-bun install
+Configuration file locations:
+- `/etc/coffeesuite/config.json` System settings
+- `~/config/coffeesuite/config.json` User Prefered Settings
+
+## Hyprland Oneshots
+
+coffeesuite will make certain programs auto create their own "oneshot" workspaces.
+```json
+// config.json
+{
+	"oneshots": {
+		"Discord": {
+			"class": "discord"
+		},
+		"Thunderbird": {
+			"class": "*.Thunderbird"
+		}
+	}
+}
 ```
+![](./assets/oneshot-ss.png)
 
-To run:
+## Battery Indicator
 
-```bash
-bun run index.ts
+Will add a notification about the battery when its `low`, `critical` or `full`.
+```json
+// config.json
+{
+	"battery": {
+		"low": 10, // 10 by default
+		"critical": 5, // 5 by default
+	}
+}
 ```
-
-This project was created using `bun init` in bun v1.2.15. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
