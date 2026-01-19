@@ -37,8 +37,3 @@ jobs:
           overwrite_files: true
           make_latest: true
           draft: true
-      - name: Comment release draft link
-        uses: thollander/actions-comment-pull-request@v3
-        with:
-          message: |
-            ${{ github.head_ref }}: ${{ steps.release.url }}
