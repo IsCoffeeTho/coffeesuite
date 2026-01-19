@@ -3,7 +3,7 @@ on:
     types:
       - closed
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -26,13 +26,7 @@ jobs:
         with:
           tag_name: "${{ github.head_ref }}"
           generate_release_notes: true
-          files: |
-            dist/${{ github.head_ref }}/*-linux-x64
-            dist/${{ github.head_ref }}/*-linux-x64-modern
-            dist/${{ github.head_ref }}/*-linux-x64-baseline
-            dist/${{ github.head_ref }}/*-linux-arm64
-            dist/${{ github.head_ref }}/*-linux-arm64-modern
-          preserve_order: true
+          files: dist/${{ github.head_ref }}/*
           fail_on_unmatched_files: true
           overwrite_files: true
           make_latest: true
