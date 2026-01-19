@@ -10,24 +10,35 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        name: Checkout
-      - uses: oven-sh/setup-bun@v2
-        name: Setup Bun
-      - run: bun install
-        name: Install Dependancies
-      - run: bun run build
-        name: Build binaries
-      - uses: softprops/action-gh-release@v2
-        name: Draft Release
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install Dependancies
+        run: bun install
+      - name: Build binaries
+        run: bun run build
+      - name: Draft Release
+        uses: softprops/action-gh-release@v2
         id: release
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           tag_name: "${{ github.head_ref }}"
-          name: "v${{ github.head_ref }}"
-          body: "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ github.ref }}...${{ github.head_ref }}\n${{ inputs.body }}"
-          draft: true
-          make_latest: true
+          generate_release_notes: true
+          files: |
+            dist/${{ github.head_ref }}/*-linux-x64
+            dist/${{ github.head_ref }}/*-linux-x64-modern
+            dist/${{ github.head_ref }}/*-linux-x64-baseline
+            dist/${{ github.head_ref }}/*-linux-arm64
+            dist/${{ github.head_ref }}/*-linux-arm64-modern
+          preserve_order: true
+          fail_on_unmatched_files: true
           overwrite_files: true
-          files: dist/*/*
+          make_latest: true
+          draft: true
+      - name: Comment release draft link
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          message: |
+            ${{ github.head_ref }}: ${{ steps.release.url }}
