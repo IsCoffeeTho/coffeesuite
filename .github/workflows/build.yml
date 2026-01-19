@@ -1,0 +1,31 @@
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+
+jobs:
+  tag:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+      - uses: oven-sh/setup-bun@v2
+        name: Build release
+      - run: bun install
+      - run: bun run build
+      - uses: softprops/action-gh-release@v2
+        name: Draft Release
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: '${{ inputs.head.label }}'
+          name: '${{ inputs.head.label }}'
+          body: "**Full Changelog**: ${{ inputs.pull_request.diff_url }}\n${{ inputs.body }}"
+          draft: true
+          make_latest: true
+          files: dist/${{ inputs.head.label }}/*
+      
