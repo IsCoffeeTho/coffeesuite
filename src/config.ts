@@ -31,7 +31,7 @@ export function readConfig(cfgFile: string) {
 	try {
 		newcfg = JSON.parse(readFileSync(cfgFile).toString());
 	} catch (err) {
-		console.error(err);
+		console.log(`Couldn't read ${cfgFile}, skipping...`)
 		return;
 	}
 	Object.assign(cfg, newcfg);
