@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build-and-release:
+  build:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
@@ -24,9 +24,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
-          tag_name: "v${{ github.event.pull_request.head.label }}"
-          name: "v${{ github.event.pull_request.head.label }}"
-          body: "**Full Changelog**: ${{ github.event.pull_request.diff_url }}\n${{ inputs.body }}"
+          tag_name: "${{ github.head_ref }}"
+          name: "v${{ github.head_ref }}"
+          body: "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ github.ref }}...${{ github.head_ref }}\n${{ inputs.body }}"
           draft: true
           make_latest: true
-          files: dist/${{ github.event.pull_request.label }}/*
+          overwrite_files: true
+          files: dist/*/*
