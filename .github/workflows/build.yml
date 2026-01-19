@@ -20,7 +20,7 @@ jobs:
         name: Draft Release
         id: release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           tag_name: 'v${{ inputs.head.label }}'
           name: 'v${{ inputs.head.label }}'
